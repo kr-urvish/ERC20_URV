@@ -6,14 +6,14 @@ interface IERC20 {
     function totalSupply() external view returns (uint256);
     function balanceOf(address account) external view returns (uint256);
     function transfer(address recipient, uint256 amount) external returns (bool);
-    //function _mint(uint256 _addToken) external view returns (uint256);
-    //function allowance(address owner, address spender) external view returns (uint256);
-    //function approve(address spender, uint256 amount) external returns (bool);
-    //function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function _mint(uint256 _addToken) external view returns (uint256);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
 
 
     event Transfer(address indexed from, address indexed to, uint256 value);
-    //event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
 
@@ -25,7 +25,7 @@ contract SampleToken is IERC20 {
     uint8 public constant decimals = 0;  // best prectice is 18
 
     mapping(address => uint256) balances;
-    //mapping(address => mapping (address => uint256)) allowed;
+    mapping(address => mapping (address => uint256)) allowed;
 
 
     uint256 totalSupply_;
@@ -59,37 +59,31 @@ contract SampleToken is IERC20 {
     }
     function mint(uint256 _addToken) public returns(uint256) {
         totalSupply_ = totalSupply_ + _addToken;
-        balances[msg.sender] += _addToken;
+        balances[msg.sender] += _addToken;  //er
         
         return totalSupply_; 
     }
 
-    // function _mint(address account, uint256 amount) internal virtual override {
-    //     require(ERC20.totalSupply() + amount <= cap(), "ERC20Capped: cap exceeded");
-    //     super._mint(account, amount);
-    // }
+    function approve(address delegate, uint256 numTokens) public override returns (bool) {
+        allowed[msg.sender][delegate] = numTokens;
+        emit Approval(msg.sender, delegate, numTokens);
+        return true;
+    }
 
+    function allowance(address owner, address delegate) public override view returns (uint) {
+        return allowed[owner][delegate];
+    }
 
-    // function approve(address delegate, uint256 numTokens) public override returns (bool) {
-    //     allowed[msg.sender][delegate] = numTokens;
-    //     emit Approval(msg.sender, delegate, numTokens);
-    //     return true;
-    // }
+    function transferFrom(address owner, address buyer, uint256 numTokens) public override returns (bool) {
+        require(numTokens <= balances[owner]);
+        require(numTokens <= allowed[owner][msg.sender]);
 
-    // function allowance(address owner, address delegate) public override view returns (uint) {
-    //     return allowed[owner][delegate];
-    // }
-
-    // function transferFrom(address owner, address buyer, uint256 numTokens) public override returns (bool) {
-    //     require(numTokens <= balances[owner]);
-    //     require(numTokens <= allowed[owner][msg.sender]);
-
-    //     balances[owner] = balances[owner].sub(numTokens);
-    //     allowed[owner][msg.sender] = allowed[owner][msg.sender].sub(numTokens);
-    //     balances[buyer] = balances[buyer].add(numTokens);
-    //     emit Transfer(owner, buyer, numTokens);
-    //     return true;
-    // }
+        balances[owner] = balances[owner] - numTokens;
+        allowed[owner][msg.sender] = allowed[owner][msg.sender] - numTokens;
+        balances[buyer] = balances[buyer] + numTokens;
+        emit Transfer(owner, buyer, numTokens);
+        return true;
+    }
 }
 
 // library SafeMath {

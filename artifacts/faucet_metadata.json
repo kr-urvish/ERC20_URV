@@ -6,35 +6,28 @@
 	"output": {
 		"abi": [
 			{
-				"anonymous": false,
-				"inputs": [
+				"inputs": [],
+				"stateMutability": "payable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "amountAllowed",
+				"outputs": [
 					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "from",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
-						"indexed": false,
 						"internalType": "uint256",
-						"name": "value",
+						"name": "",
 						"type": "uint256"
 					}
 				],
-				"name": "Transfer",
-				"type": "event"
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "account",
+						"name": "tokenOwner",
 						"type": "address"
 					}
 				],
@@ -50,8 +43,14 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "totalSupply",
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "lockTime",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -63,27 +62,29 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "recipient",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "transfer",
+				"inputs": [],
+				"name": "owner",
 				"outputs": [
 					{
-						"internalType": "bool",
+						"internalType": "address",
 						"name": "",
-						"type": "bool"
+						"type": "address"
 					}
 				],
-				"stateMutability": "nonpayable",
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address payable",
+						"name": "_requestor",
+						"type": "address"
+					}
+				],
+				"name": "requestTokens",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			}
 		],
@@ -100,7 +101,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"token.sol": "IERC20"
+			"faucet.sol": "faucet"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -114,12 +115,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"token.sol": {
-			"keccak256": "0x6d2b2e6c089e919a103831300edb32fadf8571a6276b5c8f6f5424d372eea70e",
+		"faucet.sol": {
+			"keccak256": "0xd6978e704a9b2777ba238ad39b95b7219998c77084c2e584e99d376bc0309118",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://da9d895d25112347d90888c7d69027ebc2068b8e7522aa3ceadbf6d851531f3a",
-				"dweb:/ipfs/QmUQbgwnNUAgdJAUeNMgQuhYSjBpF6AU97u15f7f6x5NqU"
+				"bzz-raw://b9b31082728d01a33048e0733a17d5ef594729150d8fef7bf6abde0e9528060e",
+				"dweb:/ipfs/QmbY8qFr5uCjkpiPqNTSXX5USD9soktnNRuRdn6BiEN13e"
 			]
 		}
 	},
