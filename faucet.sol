@@ -1,47 +1,49 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-contract faucet {
-	
+//import "remix_tests.sol";
+// import "../contracts/MyToken.sol";
+import "MyToken.sol";
 
-    //state variable to keep track of owner and amount of ETHER to dispense
+contract Faucet{
+
+// creat obj
+    MyToken fooContract;
+    address public urvish = 0x9f477448F1B96edCE91d0e29Aa0A1f4E816C9A5f;
     address public owner;
-    uint public amountAllowed = 10*(10 ** 18);
 
 
-    //mapping to keep track of requested rokens
-    //Address and blocktime + 1 day is saved in TimeLock
-    mapping(address => uint) public lockTime;
-    mapping(address => uint256) balances;
-    //balances[amountAllowed] = owner;
+    constructor(address fooAddress) {
+        fooContract = MyToken(fooAddress);
+        owner = urvish;
+    }
+
+    //address public new_owner = msg.sender;
+     address public xyz = address(this);
 
 
-
-    //constructor to set the owner
-	constructor() payable {
-		owner = msg.sender;
-	}
-
-    //function modifier
-    // modifier onlyOwner {
-    //     require(msg.sender == owner, "Only owner can call this function.");
-    //     _; 
+    // function approveStakingPoolOnFoo(address faucetAdd, uint256 amount) public returns(bool) {
+    //     require(fooContract.approve(faucetAdd,amount),
+    //         "approveOnFoo:approval failed");
+    //     return true;
     // }
 
 
-    function balanceOf(address tokenOwner) public view returns (uint256) {
-        return balances[tokenOwner];
+    mapping ( address => uint256 ) public balances;
+    
+    uint256 amt = 100*(10**18);
+
+    function deposit(address to) public returns(bool){
+
+        // add the deposited tokens into existing balance 
+       // balances[msg.sender]+= amt;
+
+        // transfer the tokens from the sender to this contract
+        require(fooContract.transferFrom(urvish,to, amt),
+                    "Deposit is fall");
+
+        return true;
     }
 
 
-    //function to send tokens from faucet to an address
-    function requestTokens(address payable _requestor) public payable {
-
-        //chek condition
-        require(block.timestamp > lockTime[msg.sender], "lock time has not expired. Please try again later");
-        
-        _requestor.transfer(amountAllowed);        
-       // time is 1 minutes
-        lockTime[msg.sender] = block.timestamp + 1 minutes;
-    }
 }
